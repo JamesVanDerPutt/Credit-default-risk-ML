@@ -20,9 +20,9 @@ import shap
 import warnings
 warnings.filterwarnings("ignore")
 
-# ---------------------------------------------------------
-# 1. Load user dataset
-# ---------------------------------------------------------
+
+# Load user dataset
+
 
 print("Enter the path to your dataset file (CSV or Excel):")
 file_path = input().strip()
@@ -44,9 +44,9 @@ print("Columns detected:")
 print(df.columns.tolist())
 print()
 
-# ---------------------------------------------------------
-# 2. User selects feature columns + target column
-# ---------------------------------------------------------
+
+ # User selects feature columns + target column
+
 
 print("Enter feature column names (comma-separated):")
 feature_cols = [c.strip() for c in input().split(",")]
@@ -64,9 +64,9 @@ if target_col not in df.columns:
     print(f"Error: Target column '{target_col}' not found.")
     exit()
 
-# ---------------------------------------------------------
-# 3. Prepare data
-# ---------------------------------------------------------
+
+#  Prepare data
+
 
 X = df[feature_cols]
 y = df[target_col]
@@ -81,9 +81,9 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# ---------------------------------------------------------
-# 4. Define models + hyperparameters
-# ---------------------------------------------------------
+
+#  Define models + hyperparameters
+
 
 models = {
     "Logistic Regression": LogisticRegression(max_iter=500),
@@ -105,9 +105,9 @@ param_grids = {
     }
 }
 
-# ---------------------------------------------------------
-# 5. Train + evaluate models
-# ---------------------------------------------------------
+
+#  Train + evaluate models
+
 
 results = {}
 
@@ -135,9 +135,9 @@ for name, model in models.items():
         "tpr": tpr
     }
 
-# ---------------------------------------------------------
-# 6. Select best model
-# ---------------------------------------------------------
+
+#  Select best model
+
 
 best_name = max(results, key=lambda k: results[k]["roc_auc"])
 best_model = results[best_name]["model"]
@@ -145,9 +145,9 @@ best_model = results[best_name]["model"]
 print(f"\n=== BEST MODEL: {best_name} ===")
 print(f"ROC-AUC: {results[best_name]['roc_auc']:.4f}")
 
-# ---------------------------------------------------------
-# 7. Plot ROC curves
-# ---------------------------------------------------------
+
+#  Plot ROC curves
+
 
 plt.figure(figsize=(10, 6))
 for name, res in results.items():
@@ -161,9 +161,9 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
-# ---------------------------------------------------------
-# 8. Feature importance (Random Forest or Gradient Boosting)
-# ---------------------------------------------------------
+
+#  Feature importance (Random Forest or Gradient Boosting)
+
 
 if hasattr(best_model, "feature_importances_"):
     importances = best_model.feature_importances_
@@ -176,9 +176,9 @@ if hasattr(best_model, "feature_importances_"):
     plt.tight_layout()
     plt.show()
 
-# ---------------------------------------------------------
-# 9. SHAP explainability
-# ---------------------------------------------------------
+
+#  SHAP explainability
+
 
 print("\nGenerating SHAP values...")
 
@@ -189,9 +189,9 @@ shap.summary_plot(shap_values, X_test, show=False)
 plt.tight_layout()
 plt.show()
 
-# ---------------------------------------------------------
-# 10. Predict new customer profile
-# ---------------------------------------------------------
+
+#  Predict new customer profile
+
 
 print("\nWould you like to enter a new customer profile? (yes/no)")
 if input().strip().lower() == "yes":
